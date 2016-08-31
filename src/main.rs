@@ -1,29 +1,47 @@
-extern crate rand;
-
-use std::io;
-use std::cmp::Ordering;
-use rand::Rng;
-
 fn main() {
-    println!("Guess the number!");
-    println!("Please input your guess");
-    let randomm = rand::thread_rng().gen_range(1, 101);
-    println!("The secret number is {}", randomm);
-    loop {
-      let mut guess = String::new();
-      io::stdin().read_line(&mut guess).expect("Failed to read line");
-      let guess: u32 = match guess.trim().parse() {
-        Ok(num) => num,
-        Err(_) => continue,
-      };
-      match guess.cmp(&randomm) {
-        Ordering::Less => println!("Go UP"),
-        Ordering::Equal => {
-          println!("Yeeshhhh!!!");
-          break;
-        },
-        Ordering::Greater => println!("Go DOWN"),
-      }
-      println!("You guessed {}", guess);
-    }
+  let mut vec1 = Vec::new();
+  vec1.push(1);
+  vec1.push(2);
+  take_ownership_as_immutable(vec1);
+  //vec1.push(4); // <-- fails
+  
+  let mut vec2 = Vec::new();
+  vec2.push(1);
+  vec2.push(2);
+  take_full_ownership(vec2);
+  //vec2.push(4); // <-- fails
+
+  let mut vec3 = Vec::new();
+  vec3.push(1);
+  vec3.push(2);
+  borrow_immutable(&vec3);
+  vec3.push(4);
+  println!("fn main says vec3 = {:?}", vec3);
+
+  borrow_mutable(&mut vec3);
+  vec3.push(99);
+  println!("fn main says vec3 = {:?}", vec3);
+}
+
+// passage of ownership, no mutability
+fn take_ownership_as_immutable(vect: Vec<i32>) {
+  //vect.push(3); // <-- fails
+  println!("fn take_ownership_as_immutable says vect = {:?}", vect);
+}
+
+// passage of ownership + allow mutability
+fn take_full_ownership(mut vect: Vec<i32>) {
+  vect.push(3);
+  println!("fn take_full_ownership says vect = {:?}", vect);
+}
+
+// borrowing, no mutability
+fn borrow_immutable(vect: &Vec<i32>) {
+  println!("fn borrow_immutable says vect = {:?}", vect);
+}
+
+// borrowing + mutability
+fn borrow_mutable(vect: &mut Vec<i32>) {
+  vect.push(3);
+  println!("fn borrow_mutable says vect = {:?}", vect);
 }
