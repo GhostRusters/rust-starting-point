@@ -45,3 +45,5 @@ fn borrow_mutable(vect: &mut Vec<i32>) {
   vect.push(3);
   println!("fn borrow_mutable says vect = {:?}", vect);
 }
+
+// silly comment to verify commits from the Vagrant
